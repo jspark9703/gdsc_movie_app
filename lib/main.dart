@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gdsc_movie_app/apis/tmdb_apis.dart';
+import 'package:gdsc_movie_app/bloc/popular_movies_bloc.dart';
 import 'package:gdsc_movie_app/screens/home.dart';
 
 void main() {
@@ -11,13 +14,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'GDSC Movie'),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        home: BlocProvider(
+          create: (context) => PopularMoviesBloc(TmdbApis()),
+          child: const MyHomePage(title: "GDSC MOVIE"),
+        ));
   }
 }

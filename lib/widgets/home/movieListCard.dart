@@ -1,78 +1,92 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gdsc_movie_app/apis/tmdb_apis.dart';
+import 'package:gdsc_movie_app/bloc/popular_movies_bloc.dart';
+import 'package:gdsc_movie_app/models/movie_list.dart';
 
 class MovieListCard extends StatefulWidget {
-  const MovieListCard({required this.title, this.movieList, Key? key})
+  const MovieListCard({required this.title, required this.apiType, Key? key})
       : super(key: key);
 
+  final String apiType;
   final String title;
-  final List<dynamic>? movieList;
 
   @override
   State<MovieListCard> createState() => _MovieListCardState();
 }
 
+//apiType : now_playing, popular, top_rated, upcoming
 class _MovieListCardState extends State<MovieListCard> {
+  bool isImageLoading = true;
+  @override
+  void initState() {
+    final moviesBloc = BlocProvider.of<PopularMoviesBloc>(context);
+    moviesBloc.add(LoadMoviesEvent());
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 200,
-          child: Column(
-            children: [
-              Text(
-                widget.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              Expanded(
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
+    return BlocBuilder<PopularMoviesBloc, MoviesState>(
+      buildWhen: (prev, curr) => prev != curr,
+      builder: (context, state) {
+        if (state is MoviesLoadedState) {
+          final List<Movie> movies = state.movies.results;
+          return Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 335,
+                child: Column(
                   children: [
-                    Container(
-                      width: 150,
-                      height: 150,
-                      color: Colors.amber,
-                      child: const Text("data"),
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     const SizedBox(
-                      width: 20,
+                      height: 8,
                     ),
-                    Container(
-                      width: 150,
-                      height: 150,
-                      color: Colors.amber,
-                      child: const Text("data"),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      width: 150,
-                      height: 150,
-                      color: Colors.amber,
-                      child: const Text("data"),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      width: 150,
-                      height: 150,
-                      color: Colors.amber,
-                      child: const Text("data"),
+                    Expanded(
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: movies.length,
+                        itemBuilder: (context, index) => SizedBox(
+                          width: 160,
+                          height: 400,
+                          child: Column(
+                            children: [
+                              Image.network(
+                                TmdbApis()
+                                    .getImageUrl(200, movies[index].posterPath),
+                              ),
+                              Text(movies[index].title),
+                            ],
+                          ),
+                        ),
+                        separatorBuilder: (context, index) => const SizedBox(
+                          width: 20,
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        } else if (state is MoviesLoadingState) {
+          return const Center(
+              child: CircularProgressIndicator()); // Show loading indicator
+        } else if (state is MoviesErrorState) {
+          return Text('Error: ${state.error}'); // Show error message
+        } else {
+          return const Text('No data available'); // Show a default message
+        }
+      },
     );
   }
 }

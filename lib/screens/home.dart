@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gdsc_movie_app/models/movie_list.dart';
 import 'package:gdsc_movie_app/widgets/home/movieListCard.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -12,7 +13,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool toggleMoreButton = true;
+  final List<Movie> movieList = [];
   final SearchController _searchController = SearchController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +49,10 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Container(
               height: 65,
-              color: Theme.of(context).colorScheme.inversePrimary,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  borderRadius:
+                      const BorderRadius.vertical(bottom: Radius.circular(5))),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
                 child: SearchBar(
@@ -49,32 +60,25 @@ class _MyHomePageState extends State<MyHomePage> {
                     leading: const Icon(Icons.search)),
               ),
             ),
+            //apiType : now_playing, popular, top_rated, upcoming
             Expanded(
               child: ListView(
                 children: const [
                   MovieListCard(
-                    title: "나는 바보다",
-                  ),
-                  SizedBox(
-                    height: 20,
+                    title: "현재 상영중",
+                    apiType: "now_playing",
                   ),
                   MovieListCard(
-                    title: "나는 바보다",
-                  ),
-                  SizedBox(
-                    height: 20,
+                    title: "인기순위",
+                    apiType: "popular",
                   ),
                   MovieListCard(
-                    title: "나는 바보다",
-                  ),
-                  SizedBox(
-                    height: 20,
+                    title: "평점 높은 순",
+                    apiType: "top_rated",
                   ),
                   MovieListCard(
-                    title: "나는 바보다",
-                  ),
-                  SizedBox(
-                    height: 20,
+                    title: "신작 영화",
+                    apiType: "upcoming",
                   ),
                 ],
               ),
