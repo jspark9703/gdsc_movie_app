@@ -53,9 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
             itemBuilder: (context) {
               List<GlobalKey> keys = [key1, key2, key3, key4];
               List<String> apiTypes = [
-                "now_playing",
+                "now playing",
                 "popular",
-                "top_rated",
+                "top rated",
                 "upcoming"
               ];
               List<PopupMenuItem> items = [];
@@ -64,9 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   PopupMenuItem(
                     child: TextButton(
                       onPressed: () {
-                        Scrollable.ensureVisible(
-                          keys[i - 1].currentContext!,
-                        );
+                        Scrollable.ensureVisible(keys[i - 1].currentContext!,
+                            duration: const Duration(milliseconds: 500));
                       },
                       child: Text(apiTypes[i - 1]),
                     ),
@@ -96,97 +95,99 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             //apiType : now_playing, popular, top_rated, upcoming
             Expanded(
-              child: ListView(
-                children: [
-                  BlocBuilder<NowMoviesBloc, MoviesState>(
-                      builder: (context, state) {
-                    if (state is MoviesLoadedState) {
-                      nowMovieList = state.moviesData.results;
-                      return MovieListCard(
-                        key: key1,
-                        title: "현재 상영중",
-                        movieList: nowMovieList,
-                      );
-                    } else if (state is MoviesLoadingState) {
-                      return const Center(
-                          child:
-                              CircularProgressIndicator()); // Show loading indicator
-                    } else if (state is MoviesErrorState) {
-                      return Text(
-                          'Error: ${state.error}'); // Show error message
-                    } else {
-                      return const Text(
-                          'No data available'); // Show a default message
-                    }
-                  }),
-                  // popular
-                  BlocBuilder<PopMoviesBloc, MoviesState>(
-                      builder: (context, state) {
-                    if (state is MoviesLoadedState) {
-                      nowMovieList = state.moviesData.results;
-                      return MovieListCard(
-                        key: key2,
-                        title: "인기 순위",
-                        movieList: nowMovieList,
-                      );
-                    } else if (state is MoviesLoadingState) {
-                      return const Center(
-                          child:
-                              CircularProgressIndicator()); // Show loading indicator
-                    } else if (state is MoviesErrorState) {
-                      return Text(
-                          'Error: ${state.error}'); // Show error message
-                    } else {
-                      return const Text(
-                          'No data available'); // Show a default message
-                    }
-                  }),
-                  //top
-                  BlocBuilder<TopMoviesBloc, MoviesState>(
-                      builder: (context, state) {
-                    if (state is MoviesLoadedState) {
-                      nowMovieList = state.moviesData.results;
-                      return MovieListCard(
-                        key: key3,
-                        title: "평점 높은 순",
-                        movieList: nowMovieList,
-                      );
-                    } else if (state is MoviesLoadingState) {
-                      return const Center(
-                          child:
-                              CircularProgressIndicator()); // Show loading indicator
-                    } else if (state is MoviesErrorState) {
-                      return Text(
-                          'Error: ${state.error}'); // Show error message
-                    } else {
-                      return const Text(
-                          'No data available'); // Show a default message
-                    }
-                  }),
-                  //up
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    BlocBuilder<NowMoviesBloc, MoviesState>(
+                        builder: (context, state) {
+                      if (state is MoviesLoadedState) {
+                        nowMovieList = state.moviesData.results;
+                        return MovieListCard(
+                          key: key1,
+                          title: "현재 상영중",
+                          movieList: nowMovieList,
+                        );
+                      } else if (state is MoviesLoadingState) {
+                        return const Center(
+                            child:
+                                CircularProgressIndicator()); // Show loading indicator
+                      } else if (state is MoviesErrorState) {
+                        return Text(
+                            'Error: ${state.error}'); // Show error message
+                      } else {
+                        return const Text(
+                            'No data available'); // Show a default message
+                      }
+                    }),
+                    // popular
+                    BlocBuilder<PopMoviesBloc, MoviesState>(
+                        builder: (context, state) {
+                      if (state is MoviesLoadedState) {
+                        nowMovieList = state.moviesData.results;
+                        return MovieListCard(
+                          key: key2,
+                          title: "인기 순위",
+                          movieList: nowMovieList,
+                        );
+                      } else if (state is MoviesLoadingState) {
+                        return const Center(
+                            child:
+                                CircularProgressIndicator()); // Show loading indicator
+                      } else if (state is MoviesErrorState) {
+                        return Text(
+                            'Error: ${state.error}'); // Show error message
+                      } else {
+                        return const Text(
+                            'No data available'); // Show a default message
+                      }
+                    }),
+                    //top
+                    BlocBuilder<TopMoviesBloc, MoviesState>(
+                        builder: (context, state) {
+                      if (state is MoviesLoadedState) {
+                        nowMovieList = state.moviesData.results;
+                        return MovieListCard(
+                          key: key3,
+                          title: "평점 높은 순",
+                          movieList: nowMovieList,
+                        );
+                      } else if (state is MoviesLoadingState) {
+                        return const Center(
+                            child:
+                                CircularProgressIndicator()); // Show loading indicator
+                      } else if (state is MoviesErrorState) {
+                        return Text(
+                            'Error: ${state.error}'); // Show error message
+                      } else {
+                        return const Text(
+                            'No data available'); // Show a default message
+                      }
+                    }),
+                    //up
 
-                  BlocBuilder<UpMoviesBloc, MoviesState>(
-                      builder: (context, state) {
-                    if (state is MoviesLoadedState) {
-                      nowMovieList = state.moviesData.results;
-                      return MovieListCard(
-                        key: key4,
-                        title: "개봉 예정",
-                        movieList: nowMovieList,
-                      );
-                    } else if (state is MoviesLoadingState) {
-                      return const Center(
-                          child:
-                              CircularProgressIndicator()); // Show loading indicator
-                    } else if (state is MoviesErrorState) {
-                      return Text(
-                          'Error: ${state.error}'); // Show error message
-                    } else {
-                      return const Text(
-                          'No data available'); // Show a default message
-                    }
-                  }),
-                ],
+                    BlocBuilder<UpMoviesBloc, MoviesState>(
+                        builder: (context, state) {
+                      if (state is MoviesLoadedState) {
+                        nowMovieList = state.moviesData.results;
+                        return MovieListCard(
+                          key: key4,
+                          title: "개봉 예정",
+                          movieList: nowMovieList,
+                        );
+                      } else if (state is MoviesLoadingState) {
+                        return const Center(
+                            child:
+                                CircularProgressIndicator()); // Show loading indicator
+                      } else if (state is MoviesErrorState) {
+                        return Text(
+                            'Error: ${state.error}'); // Show error message
+                      } else {
+                        return const Text(
+                            'No data available'); // Show a default message
+                      }
+                    }),
+                  ],
+                ),
               ),
             ),
           ],
