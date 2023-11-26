@@ -45,6 +45,7 @@ class _DatailScreenState extends State<DatailScreen> {
               child: ListView(children: [
                 Image.network(
                   TmdbApis().getImageUrl(300, widget.movie.posterPath),
+                  height: 500,
                 ),
                 Text(widget.movie.title,
                     style: const TextStyle(
@@ -85,22 +86,6 @@ class _DatailScreenState extends State<DatailScreen> {
                     onPressed: () {
                       launchUrl(Uri.parse(detail[0].homepage));
                     },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed)) {
-                            // Color when the button is pressed
-                            return Colors.blueAccent;
-                          }
-                          if (states.contains(MaterialState.hovered)) {
-                            // Color when the button is hovered (web/desktop)
-                            return Colors.blueAccent;
-                          }
-                          // Default color
-                          return Colors.white60;
-                        },
-                      ),
-                    ),
                     child: const Text(
                       "홈페이지 방문하기",
                     )),
