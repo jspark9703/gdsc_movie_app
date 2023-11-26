@@ -40,24 +40,41 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var key1 = GlobalKey();
+    var key2 = GlobalKey();
+    var key3 = GlobalKey();
+    var key4 = GlobalKey();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
         actions: [
           PopupMenuButton(
-            itemBuilder: (context) => [
-              const PopupMenuItem(child: Text("data")),
-              const PopupMenuItem(
-                child: Text("data"),
-              ),
-              const PopupMenuItem(
-                child: Text("data"),
-              ),
-              const PopupMenuItem(
-                child: Text("data"),
-              )
-            ],
+            itemBuilder: (context) {
+              List<GlobalKey> keys = [key1, key2, key3, key4];
+              List<String> apiTypes = [
+                "now_playing",
+                "popular",
+                "top_rated",
+                "upcoming"
+              ];
+              List<PopupMenuItem> items = [];
+              for (int i = 1; i <= 4; i++) {
+                items.add(
+                  PopupMenuItem(
+                    child: TextButton(
+                      onPressed: () {
+                        Scrollable.ensureVisible(
+                          keys[i - 1].currentContext!,
+                        );
+                      },
+                      child: Text(apiTypes[i - 1]),
+                    ),
+                  ),
+                );
+              }
+              return items;
+            },
           )
         ],
       ),
@@ -86,11 +103,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (state is MoviesLoadedState) {
                       nowMovieList = state.moviesData.results;
                       return MovieListCard(
+                        key: key1,
                         title: "현재 상영중",
                         movieList: nowMovieList,
                       );
                     } else if (state is MoviesLoadingState) {
-                      return const CircularProgressIndicator(); // Show loading indicator
+                      return const Center(
+                          child:
+                              CircularProgressIndicator()); // Show loading indicator
                     } else if (state is MoviesErrorState) {
                       return Text(
                           'Error: ${state.error}'); // Show error message
@@ -105,11 +125,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (state is MoviesLoadedState) {
                       nowMovieList = state.moviesData.results;
                       return MovieListCard(
+                        key: key2,
                         title: "인기 순위",
                         movieList: nowMovieList,
                       );
                     } else if (state is MoviesLoadingState) {
-                      return const CircularProgressIndicator(); // Show loading indicator
+                      return const Center(
+                          child:
+                              CircularProgressIndicator()); // Show loading indicator
                     } else if (state is MoviesErrorState) {
                       return Text(
                           'Error: ${state.error}'); // Show error message
@@ -124,11 +147,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (state is MoviesLoadedState) {
                       nowMovieList = state.moviesData.results;
                       return MovieListCard(
+                        key: key3,
                         title: "평점 높은 순",
                         movieList: nowMovieList,
                       );
                     } else if (state is MoviesLoadingState) {
-                      return const CircularProgressIndicator(); // Show loading indicator
+                      return const Center(
+                          child:
+                              CircularProgressIndicator()); // Show loading indicator
                     } else if (state is MoviesErrorState) {
                       return Text(
                           'Error: ${state.error}'); // Show error message
@@ -144,11 +170,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (state is MoviesLoadedState) {
                       nowMovieList = state.moviesData.results;
                       return MovieListCard(
+                        key: key4,
                         title: "개봉 예정",
                         movieList: nowMovieList,
                       );
                     } else if (state is MoviesLoadingState) {
-                      return const CircularProgressIndicator(); // Show loading indicator
+                      return const Center(
+                          child:
+                              CircularProgressIndicator()); // Show loading indicator
                     } else if (state is MoviesErrorState) {
                       return Text(
                           'Error: ${state.error}'); // Show error message

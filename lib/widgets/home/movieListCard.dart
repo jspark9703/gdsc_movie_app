@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gdsc_movie_app/apis/tmdb_apis.dart';
 import 'package:gdsc_movie_app/models/movie_list.dart';
+import 'package:gdsc_movie_app/screens/movie_detail.dart';
 
 class MovieListCard extends StatefulWidget {
   const MovieListCard({required this.title, required this.movieList, Key? key})
@@ -45,17 +46,28 @@ class _MovieListCardState extends State<MovieListCard> {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.movieList.length,
-                  itemBuilder: (context, index) => SizedBox(
-                    width: 160,
-                    height: 400,
-                    child: Column(
-                      children: [
-                        Image.network(
-                          TmdbApis().getImageUrl(
-                              200, widget.movieList[index].posterPath),
-                        ),
-                        Text(widget.movieList[index].title),
-                      ],
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return DatailScreen(
+                            movie: widget.movieList[index],
+                          );
+                        },
+                      ));
+                    },
+                    child: SizedBox(
+                      width: 160,
+                      height: 400,
+                      child: Column(
+                        children: [
+                          Image.network(
+                            TmdbApis().getImageUrl(
+                                200, widget.movieList[index].posterPath),
+                          ),
+                          Text(widget.movieList[index].title),
+                        ],
+                      ),
                     ),
                   ),
                   separatorBuilder: (context, index) => const SizedBox(
