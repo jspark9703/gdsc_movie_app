@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gdsc_movie_app/apis/tmdb_apis.dart';
-import 'package:gdsc_movie_app/bloc/popular_movies_bloc.dart';
+import 'package:gdsc_movie_app/bloc/now_playing_bloc.dart';
+import 'package:gdsc_movie_app/bloc/popular_bloc.dart';
+import 'package:gdsc_movie_app/bloc/top_rated_bloc.dart';
+import 'package:gdsc_movie_app/bloc/upcoming_bloc.dart';
 import 'package:gdsc_movie_app/screens/home.dart';
 
 void main() {
@@ -20,8 +23,21 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
-        home: BlocProvider(
-          create: (context) => PopularMoviesBloc(TmdbApis()),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => PopMoviesBloc(TmdbApis()),
+            ),
+            BlocProvider(
+              create: (context) => NowMoviesBloc(TmdbApis()),
+            ),
+            BlocProvider(
+              create: (context) => UpMoviesBloc(TmdbApis()),
+            ),
+            BlocProvider(
+              create: (context) => TopMoviesBloc(TmdbApis()),
+            )
+          ],
           child: const MyHomePage(title: "GDSC MOVIE"),
         ));
   }

@@ -12,7 +12,7 @@ class TmdbApis {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = response.data;
-      print(data);
+
       return MoviesData.fromJson(data);
     } else {
       throw Exception('Failed to load data');
