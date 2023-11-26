@@ -29,8 +29,9 @@ class _MovieListCardState extends State<MovieListCard> {
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: 335,
+          height: 320,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 widget.title,
@@ -40,7 +41,7 @@ class _MovieListCardState extends State<MovieListCard> {
                 ),
               ),
               const SizedBox(
-                height: 8,
+                height: 16,
               ),
               Expanded(
                 child: ListView.separated(
@@ -65,7 +66,7 @@ class _MovieListCardState extends State<MovieListCard> {
                             TmdbApis().getImageUrl(
                                 200, widget.movieList[index].posterPath),
                           ),
-                          Text(widget.movieList[index].title),
+                          Text(widget.movieList[index].title, maxLines: 2),
                         ],
                       ),
                     ),

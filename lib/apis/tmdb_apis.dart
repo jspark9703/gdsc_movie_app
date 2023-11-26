@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:gdsc_movie_app/models/movie_detail.dart';
 import 'package:gdsc_movie_app/models/movie_list.dart';
 
 final dio = Dio();
@@ -19,16 +20,15 @@ class TmdbApis {
     }
   }
 
-  Future<MoviesData> getDatailData(
-      String apiType, String apikey, String movieId) async {
+  Future<MovieDetail> getDatailData(String movieId, String apikey) async {
     final response = await dio.get(
-      'https://api.themoviedb.org/3/movie/$movieId/$apiType?api_key=$apikey&language=en-US&page=1',
+      'https://api.themoviedb.org/3/movie/$movieId?api_key=$apikey&language=en-US',
     );
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = response.data;
-
-      return MoviesData.fromJson(data);
+      print(data);
+      return MovieDetail.fromJson(data);
     } else {
       throw Exception('Failed to load data');
     }
