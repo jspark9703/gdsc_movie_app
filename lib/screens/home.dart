@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gdsc_movie_app/apis/tmdb_apis.dart';
 import 'package:gdsc_movie_app/bloc/movies_bloc.dart';
 import 'package:gdsc_movie_app/bloc/now_playing_bloc.dart';
 import 'package:gdsc_movie_app/bloc/popular_bloc.dart';
 import 'package:gdsc_movie_app/bloc/top_rated_bloc.dart';
 import 'package:gdsc_movie_app/bloc/upcoming_bloc.dart';
-import 'package:gdsc_movie_app/constants/api_keys/api_keys.dart';
 import 'package:gdsc_movie_app/models/filtered_movies.dart';
 import 'package:gdsc_movie_app/models/movie_list.dart';
 import 'package:gdsc_movie_app/screens/movie_detail.dart';
 import 'package:gdsc_movie_app/widgets/home/movieListCard.dart';
+import 'package:gdsc_movie_app/widgets/home/search_bar.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -92,26 +91,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Theme.of(context).colorScheme.inversePrimary,
                   borderRadius:
                       const BorderRadius.vertical(bottom: Radius.circular(5))),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
-                child: SearchAnchor.bar(
-                  searchController: _searchController,
-                  suggestionsBuilder: (context, controller) async {
-                    await TmdbApis()
-                        .queryMovies(controller.text, ApiKey.tmbd)
-                        .then((value) {
-                      setState(() {
-                        filteredMovies = value;
-                      });
-                    });
-
-                    Iterable<Widget> suggestions =
-                        getSuggestion(filteredMovies, controller);
-
-                    return suggestions.toList();
-                  },
-                  barHintText: "영화를 검색하세요",
-                ),
+              child: const Padding(
+                padding: EdgeInsets.fromLTRB(8, 8, 8, 16),
+                child: SearchWidget(),
               ),
             ),
             //apiType : now_playing, popular, top_rated, upcoming
