@@ -52,7 +52,7 @@ class _MovieListCardState extends State<MovieListCard> {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {
                           return DatailScreen(
-                            movie: widget.movieList[index],
+                            movieId: widget.movieList[index].id,
                           );
                         },
                       ));

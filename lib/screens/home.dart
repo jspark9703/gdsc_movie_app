@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gdsc_movie_app/apis/tmdb_apis.dart';
 import 'package:gdsc_movie_app/bloc/movies_bloc.dart';
 import 'package:gdsc_movie_app/bloc/now_playing_bloc.dart';
 import 'package:gdsc_movie_app/bloc/popular_bloc.dart';
 import 'package:gdsc_movie_app/bloc/top_rated_bloc.dart';
 import 'package:gdsc_movie_app/bloc/upcoming_bloc.dart';
+import 'package:gdsc_movie_app/constants/api_keys/api_keys.dart';
+import 'package:gdsc_movie_app/models/filtered_movies.dart';
 import 'package:gdsc_movie_app/models/movie_list.dart';
+import 'package:gdsc_movie_app/screens/movie_detail.dart';
 import 'package:gdsc_movie_app/widgets/home/movieListCard.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -23,6 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Movie> upMovieList = [];
   List<Movie> topMovieList = [];
   List<Movie> nowMovieList = [];
+
   final SearchController _searchController = SearchController();
 
   @override
@@ -44,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var key2 = GlobalKey();
     var key3 = GlobalKey();
     var key4 = GlobalKey();
+    List<FilteredMovie> filteredMovies = [];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -88,9 +94,24 @@ class _MyHomePageState extends State<MyHomePage> {
                       const BorderRadius.vertical(bottom: Radius.circular(5))),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
-                child: SearchBar(
-                    controller: _searchController,
-                    leading: const Icon(Icons.search)),
+                child: SearchAnchor.bar(
+                  searchController: _searchController,
+                  suggestionsBuilder: (context, controller) async {
+                    await TmdbApis()
+                        .queryMovies(controller.text, ApiKey.tmbd)
+                        .then((value) {
+                      setState(() {
+                        filteredMovies = value;
+                      });
+                    });
+
+                    Iterable<Widget> suggestions =
+                        getSuggestion(filteredMovies, controller);
+
+                    return suggestions.toList();
+                  },
+                  barHintText: "영화를 검색하세요",
+                ),
               ),
             ),
             //apiType : now_playing, popular, top_rated, upcoming
@@ -108,9 +129,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           movieList: nowMovieList,
                         );
                       } else if (state is MoviesLoadingState) {
-                        return const Center(
-                            child:
-                                CircularProgressIndicator()); // Show loading indicator
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 320,
+                          child:
+                              const Center(child: CircularProgressIndicator()),
+                        ); // Show loading indicator
                       } else if (state is MoviesErrorState) {
                         return Text(
                             'Error: ${state.error}'); // Show error message
@@ -130,9 +154,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           movieList: nowMovieList,
                         );
                       } else if (state is MoviesLoadingState) {
-                        return const Center(
-                            child:
-                                CircularProgressIndicator()); // Show loading indicator
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 320,
+                          child:
+                              const Center(child: CircularProgressIndicator()),
+                        ); // Show loading indicator
                       } else if (state is MoviesErrorState) {
                         return Text(
                             'Error: ${state.error}'); // Show error message
@@ -152,9 +179,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           movieList: nowMovieList,
                         );
                       } else if (state is MoviesLoadingState) {
-                        return const Center(
-                            child:
-                                CircularProgressIndicator()); // Show loading indicator
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 320,
+                          child:
+                              const Center(child: CircularProgressIndicator()),
+                        ); // Show loading indicator
                       } else if (state is MoviesErrorState) {
                         return Text(
                             'Error: ${state.error}'); // Show error message
@@ -175,9 +205,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           movieList: nowMovieList,
                         );
                       } else if (state is MoviesLoadingState) {
-                        return const Center(
-                            child:
-                                CircularProgressIndicator()); // Show loading indicator
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 320,
+                          child:
+                              const Center(child: CircularProgressIndicator()),
+                        ); // Show loading indicator
                       } else if (state is MoviesErrorState) {
                         return Text(
                             'Error: ${state.error}'); // Show error message
@@ -194,5 +227,34 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  Iterable<Widget> getSuggestion(
+      List<FilteredMovie> filteredMovies, SearchController controller) {
+    return filteredMovies.map((e) {
+      return TextButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return DatailScreen(
+                  movieId: e.id,
+                );
+              },
+            ));
+            setState(() {
+              controller.text = e.title;
+            });
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                e.title,
+                overflow: TextOverflow.clip,
+              ),
+              Text("평점 : ${e.voteAverage}")
+            ],
+          ));
+    });
   }
 }

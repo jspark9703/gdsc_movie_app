@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:gdsc_movie_app/models/filtered_movies.dart';
 import 'package:gdsc_movie_app/models/movie_detail.dart';
 import 'package:gdsc_movie_app/models/movie_list.dart';
 
@@ -36,5 +37,18 @@ class TmdbApis {
 
   String getImageUrl(int size, String path) {
     return "https://image.tmdb.org/t/p/w$size$path";
+  }
+
+  Future<List<FilteredMovie>> queryMovies(String movie, String apikey) async {
+    Map<String, String> queryparm = {"query": movie};
+    List<FilteredMovie> filteredMovies = [];
+
+    final response = await dio.request(
+        "https://api.themoviedb.org/3/search/movie?api_key=$apikey&language=en-US",
+        queryParameters: queryparm);
+    final List<dynamic> data = response.data["results"];
+
+    filteredMovies = data.map((e) => FilteredMovie.fromJson(e)).toList();
+    return filteredMovies;
   }
 }

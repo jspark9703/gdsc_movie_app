@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gdsc_movie_app/apis/tmdb_apis.dart';
 import 'package:gdsc_movie_app/constants/api_keys/api_keys.dart';
 import 'package:gdsc_movie_app/models/movie_detail.dart';
-import 'package:gdsc_movie_app/models/movie_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DatailScreen extends StatefulWidget {
-  DatailScreen({required this.movie, super.key});
-  Movie movie;
+  DatailScreen({required this.movieId, super.key});
+  int movieId;
   @override
   State<DatailScreen> createState() => _DatailScreenState();
 }
@@ -19,7 +18,7 @@ class _DatailScreenState extends State<DatailScreen> {
   void initState() {
     try {
       TmdbApis()
-          .getDatailData(widget.movie.id.toString(), ApiKey.tmbd)
+          .getDatailData(widget.movieId.toString(), ApiKey.tmbd)
           .then((value) {
         setState(() {
           isLoading = false;
@@ -38,23 +37,20 @@ class _DatailScreenState extends State<DatailScreen> {
         ? Scaffold(
             appBar: AppBar(
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              title: Text(widget.movie.title),
+              title: Text(detail[0].title),
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
               child: ListView(children: [
                 Image.network(
-                  TmdbApis().getImageUrl(300, widget.movie.posterPath),
+                  TmdbApis().getImageUrl(300, detail[0].posterPath),
                   height: 500,
                 ),
-                Text(widget.movie.title,
+                Text(detail[0].title,
                     style: const TextStyle(
                         fontSize: 40, fontWeight: FontWeight.bold)),
                 Row(
-                  children: [
-                    const Text("개봉일자: "),
-                    Text(widget.movie.releaseDate)
-                  ],
+                  children: [const Text("개봉일자: "), Text(detail[0].releaseDate)],
                 ),
                 Row(
                   children: [
@@ -65,12 +61,12 @@ class _DatailScreenState extends State<DatailScreen> {
                 Row(
                   children: [
                     const Text("평점: "),
-                    Text("${widget.movie.voteAverage.toString()}/10.0")
+                    Text("${detail[0].voteAverage}/10.0")
                   ],
                 ),
                 Row(
                   children: [
-                    widget.movie.adult == true
+                    detail[0].adult == true
                         ? const Text("청소년 관람 불가")
                         : const Text("청소년 관람 가능")
                   ],
@@ -78,7 +74,7 @@ class _DatailScreenState extends State<DatailScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text(widget.movie.overview),
+                Text(detail[0].overview),
                 const SizedBox(
                   height: 20,
                 ),
