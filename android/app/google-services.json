@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1085223617508",
+    "firebase_url": "https://gdsc-movie-app-default-rtdb.firebaseio.com",
+    "project_id": "gdsc-movie-app",
+    "storage_bucket": "gdsc-movie-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085223617508:android:c18e0d4e2efdf12dce3df1",
+        "android_client_info": {
+          "package_name": "com.example.gdsc_movie_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3cSCvfRda7ZjpKagKKu8W7oMhgqR34Kw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085223617508:android:2df219f262282795ce3df1",
+        "android_client_info": {
+          "package_name": "com.gdsc_junsoo.movie_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3cSCvfRda7ZjpKagKKu8W7oMhgqR34Kw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

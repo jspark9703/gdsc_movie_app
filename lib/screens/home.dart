@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gdsc_movie_app/apis/firebase.dart';
 import 'package:gdsc_movie_app/bloc/movies_bloc.dart';
 import 'package:gdsc_movie_app/bloc/now_playing_bloc.dart';
 import 'package:gdsc_movie_app/bloc/popular_bloc.dart';
@@ -8,8 +10,10 @@ import 'package:gdsc_movie_app/bloc/upcoming_bloc.dart';
 import 'package:gdsc_movie_app/models/filtered_movies.dart';
 import 'package:gdsc_movie_app/models/movie_list.dart';
 import 'package:gdsc_movie_app/screens/movie_detail.dart';
+import 'package:gdsc_movie_app/widgets/home/auth_func.dart';
 import 'package:gdsc_movie_app/widgets/home/movieListCard.dart';
 import 'package:gdsc_movie_app/widgets/home/search_bar.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -54,6 +58,13 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
         actions: [
+          Consumer<ApplicationState>(
+            builder: (context, appState, _) => AuthFunc(
+                loggedIn: appState.loggedIn,
+                signOut: () {
+                  FirebaseAuth.instance.signOut();
+                }),
+          ),
           PopupMenuButton(
             itemBuilder: (context) {
               List<GlobalKey> keys = [key1, key2, key3, key4];
