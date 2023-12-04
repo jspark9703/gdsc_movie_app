@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gdsc_movie_app/apis/tmdb_apis.dart';
 import 'package:gdsc_movie_app/models/movie_list.dart';
-import 'package:gdsc_movie_app/screens/movie_detail.dart';
+import 'package:go_router/go_router.dart';
 
 class MovieListCard extends StatefulWidget {
   const MovieListCard({required this.title, required this.movieList, Key? key})
@@ -49,13 +49,9 @@ class _MovieListCardState extends State<MovieListCard> {
                   itemCount: widget.movieList.length,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return DatailScreen(
-                            movieId: widget.movieList[index].id,
-                          );
-                        },
-                      ));
+                      context.goNamed("detail", pathParameters: {
+                        "movieId": widget.movieList[index].id.toString()
+                      });
                     },
                     child: SizedBox(
                       width: 160,

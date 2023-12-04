@@ -9,10 +9,10 @@ import 'package:gdsc_movie_app/bloc/top_rated_bloc.dart';
 import 'package:gdsc_movie_app/bloc/upcoming_bloc.dart';
 import 'package:gdsc_movie_app/models/filtered_movies.dart';
 import 'package:gdsc_movie_app/models/movie_list.dart';
-import 'package:gdsc_movie_app/screens/movie_detail.dart';
 import 'package:gdsc_movie_app/widgets/home/auth_func.dart';
 import 'package:gdsc_movie_app/widgets/home/movieListCard.dart';
 import 'package:gdsc_movie_app/widgets/home/search_bar.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -227,13 +227,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return filteredMovies.map((e) {
       return TextButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return DatailScreen(
-                  movieId: e.id,
-                );
-              },
-            ));
+            context.goNamed("detail",
+                pathParameters: {"movieId": e.id.toString()});
+
             setState(() {
               controller.text = e.title;
             });

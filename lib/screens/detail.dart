@@ -1,17 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gdsc_movie_app/apis/firebase.dart';
 import 'package:gdsc_movie_app/apis/tmdb_apis.dart';
 import 'package:gdsc_movie_app/constants/api_keys/api_keys.dart';
 import 'package:gdsc_movie_app/models/movie_detail.dart';
+import 'package:gdsc_movie_app/widgets/detail/detail_comment.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DatailScreen extends StatefulWidget {
-  DatailScreen({required this.movieId, super.key});
-  int movieId;
+import '../widgets/home/auth_func.dart';
+
+class DetailScreen extends StatefulWidget {
+  DetailScreen({required this.movieId, super.key});
+  String movieId;
   @override
-  State<DatailScreen> createState() => _DatailScreenState();
+  State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DatailScreenState extends State<DatailScreen> {
+class _DetailScreenState extends State<DetailScreen> {
   final List<MovieDetail> detail = [];
   bool isLoading = true;
   @override
@@ -38,6 +44,15 @@ class _DatailScreenState extends State<DatailScreen> {
             appBar: AppBar(
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               title: Text(detail[0].title),
+              actions: [
+                Consumer<ApplicationState>(
+                  builder: (context, appState, _) => AuthFunc(
+                      loggedIn: appState.loggedIn,
+                      signOut: () {
+                        FirebaseAuth.instance.signOut();
+                      }),
+                ),
+              ],
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -85,6 +100,7 @@ class _DatailScreenState extends State<DatailScreen> {
                     child: const Text(
                       "홈페이지 방문하기",
                     )),
+                DetailComment(movieId: widget.movieId.toString()),
               ]),
             ),
           )

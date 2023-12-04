@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gdsc_movie_app/apis/tmdb_apis.dart';
 import 'package:gdsc_movie_app/constants/api_keys/api_keys.dart';
 import 'package:gdsc_movie_app/models/filtered_movies.dart';
-import 'package:gdsc_movie_app/screens/movie_detail.dart';
+import 'package:go_router/go_router.dart';
 
 class SearchWidget extends StatefulWidget {
   const SearchWidget({super.key});
@@ -41,13 +41,9 @@ class _SearchWidgetState extends State<SearchWidget> {
     return filteredMovies.map((e) {
       return TextButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return DatailScreen(
-                  movieId: e.id,
-                );
-              },
-            ));
+            context.goNamed("detail",
+                pathParameters: {"movieId": e.id.toString()});
+
             setState(() {
               controller.text = e.title;
             });

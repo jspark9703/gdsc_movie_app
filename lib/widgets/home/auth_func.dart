@@ -19,31 +19,31 @@ class AuthFunc extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 24, bottom: 8),
-          child: IconButton(
+          child: TextButton(
               onPressed: () {
                 !loggedIn ? context.push('/sign-in') : signOut();
               },
-              icon: !loggedIn ? const Text('sign-in') : const Text('Logout')),
+              child: !loggedIn ? const Text('sign-in') : const Text('Logout')),
         ),
         Visibility(
             visible: loggedIn,
             child: Padding(
               padding: const EdgeInsets.only(left: 24, bottom: 8),
-              child: IconButton(
+              child: TextButton(
                   onPressed: () {
                     context.push('/profile');
                   },
-                  icon: const Text('Profile')),
+                  child: const Text('Profile')),
             )),
         Visibility(
             visible: enableFreeSwag,
             child: Padding(
               padding: const EdgeInsets.only(left: 24, bottom: 8),
-              child: IconButton(
+              child: TextButton(
                   onPressed: () {
                     throw Exception('free swag unimplemented');
                   },
-                  icon: const Text('Free swag!')),
+                  child: const Text('Free swag!')),
             )),
       ],
     );
