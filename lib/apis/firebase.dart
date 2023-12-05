@@ -10,6 +10,7 @@ class ApplicationState extends ChangeNotifier {
   ApplicationState() {
     init();
   }
+  String? userEmail;
 
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
@@ -27,6 +28,7 @@ class ApplicationState extends ChangeNotifier {
 
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
+        userEmail = user.email;
         _loggedIn = true;
         _emailVerified = user.emailVerified;
       } else {

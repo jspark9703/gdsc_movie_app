@@ -16,9 +16,9 @@ class _DetailCommentState extends State<DetailComment> {
     TextEditingController textEditingController = TextEditingController();
 
     final db = FirebaseFirestore.instance;
-    final movieComment = <String, dynamic>{
+    var movieComment = <String, dynamic>{
       "movie_id": widget.movieId,
-      "user_imail": "jspark9703@naver.com",
+      "user_email": "jspark9703@naver.com",
       "comment": "this is interesting",
       "score": 10,
     };
@@ -32,15 +32,59 @@ class _DetailCommentState extends State<DetailComment> {
                         controller: textEditingController,
                         maxLines: 1,
                         onSubmitted: (value) {
+                          setState(() {
+                            movieComment = <String, dynamic>{
+                              "movie_id": widget.movieId,
+                              "user_email": appState.userEmail,
+                              "comment": value,
+                            };
+                          });
                           db.collection("movieComment").add(movieComment).then(
                               (DocumentReference doc) => print(
                                   'DocumentSnapshot added with ID: ${doc.id}'));
                         },
                       ),
-                      const SizedBox(
-                        height: 100,
-                        child: SingleChildScrollView(
-                          child: Column(children: []),
+                      SizedBox(
+                        height: 300,
+                        child: FutureBuilder<QuerySnapshot>(
+                          future: db
+                              .collection("movieComment")
+                              .where("movie_id", isEqualTo: widget.movieId)
+                              .get(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child:
+                                      CircularProgressIndicator()); // Display a loading indicator while fetching data.
+                            }
+
+                            if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            }
+
+                            if (!snapshot.hasData ||
+                                snapshot.data!.docs.isEmpty) {
+                              return const Text('No comments available.');
+                            }
+
+                            // Replace 1 with the actual number of comments you want to display.
+                            int itemCount = snapshot.data!.size;
+
+                            return ListView.builder(
+                              itemCount: itemCount,
+                              itemBuilder: (context, index) {
+                                var data = snapshot.data!.docs[index];
+                                String comment = data["comment"];
+                                String user = data["user_email"];
+                                return ListTile(
+                                  contentPadding: const EdgeInsets.all(8),
+                                  leading: Text(user),
+                                  title: Text(comment),
+                                );
+                              },
+                            );
+                          },
                         ),
                       )
                     ],
