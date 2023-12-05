@@ -51,9 +51,12 @@ class _SearchWidgetState extends State<SearchWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                e.title,
-                overflow: TextOverflow.clip,
+              SizedBox(
+                width: 200,
+                child: Text(
+                  e.title,
+                  overflow: TextOverflow.clip,
+                ),
               ),
               Text("평점 : ${e.voteAverage}")
             ],
