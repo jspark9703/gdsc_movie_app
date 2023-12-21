@@ -86,10 +86,14 @@ class _DetailCommentState extends State<DetailComment> {
                           String comment = data["comment"];
                           String user = data["user_email"];
                           return ListTile(
-                            contentPadding: const EdgeInsets.all(8),
-                            leading: Text(user),
-                            title: Text(comment),
-                          );
+                              contentPadding: const EdgeInsets.all(8),
+                              leading: Text(user),
+                              title: Text(comment),
+                              trailing: appState.userEmail == user
+                                  ? IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.delete))
+                                  : null);
                         },
                       );
                     },

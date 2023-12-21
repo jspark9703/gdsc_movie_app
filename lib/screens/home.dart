@@ -228,8 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return TextButton(
           onPressed: () {
             context.goNamed("detail",
-                pathParameters: {"movieId": e.id.toString()});
-
+                pathParameters: {"movieId": e.id.toString()}, extra: {});
             setState(() {
               controller.text = e.title;
             });

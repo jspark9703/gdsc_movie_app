@@ -39,28 +39,35 @@ class _SearchWidgetState extends State<SearchWidget> {
   Iterable<Widget> getSuggestion(
       List<FilteredMovie> filteredMovies, SearchController controller) {
     return filteredMovies.map((e) {
-      return TextButton(
-          onPressed: () {
-            context.goNamed("detail",
-                pathParameters: {"movieId": e.id.toString()});
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextButton(
+            onPressed: () {
+              context.goNamed("detail",
+                  pathParameters: {"movieId": e.id.toString()});
 
-            setState(() {
-              controller.text = e.title;
-            });
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 200,
-                child: Text(
-                  e.title,
-                  overflow: TextOverflow.clip,
+              setState(() {
+                controller.text = e.title;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.network(
+                  TmdbApis().getImageUrl(300, e.posterPath),
+                  height: 110,
                 ),
-              ),
-              Text("평점 : ${e.voteAverage}")
-            ],
-          ));
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    e.title,
+                    overflow: TextOverflow.clip,
+                  ),
+                ),
+                Text("평점 : ${e.voteAverage}")
+              ],
+            )),
+      );
     });
   }
 }
