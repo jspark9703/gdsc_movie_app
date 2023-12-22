@@ -94,6 +94,9 @@ final router = GoRouter(
           builder: (context, state) {
             return ProfileScreen(
               providers: const [],
+              avatar: CircleAvatar(
+                  minRadius: 100,
+                  foregroundImage: NetworkImage(state.extra.toString())),
               actions: [
                 SignedOutAction((context) {
                   context.pushReplacement('/');

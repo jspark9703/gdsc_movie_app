@@ -53,10 +53,11 @@ class _SearchWidgetState extends State<SearchWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.network(
-                  TmdbApis().getImageUrl(300, e.posterPath),
-                  height: 110,
-                ),
+                if (e.posterPath != "")
+                  Image.network(
+                    TmdbApis().getImageUrl(300, e.posterPath),
+                    height: 110,
+                  ),
                 SizedBox(
                   width: 200,
                   child: Text(
