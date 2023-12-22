@@ -11,16 +11,18 @@ class DetailComment extends StatefulWidget {
 }
 
 class _DetailCommentState extends State<DetailComment> {
+  bool isEditting = false;
+
   @override
   Widget build(BuildContext context) {
     TextEditingController textEditingController = TextEditingController();
+    TextEditingController commentEditingController = TextEditingController();
 
     final db = FirebaseFirestore.instance;
     var movieComment = <String, dynamic>{
       "movie_id": widget.movieId,
       "user_email": "jspark9703@naver.com",
       "comment": "this is interesting",
-      "score": 10,
     };
 
     return Consumer<ApplicationState>(
@@ -88,11 +90,49 @@ class _DetailCommentState extends State<DetailComment> {
                           return ListTile(
                               contentPadding: const EdgeInsets.all(8),
                               leading: Text(user),
-                              title: Text(comment),
+                              title: isEditting
+                                  ? TextField(
+                                      controller: commentEditingController,
+                                      autofocus: true,
+                                      maxLines: 1,
+                                      onSubmitted: (value) {
+                                        db
+                                            .collection("movieComment")
+                                            .doc(data.id)
+                                            .set({
+                                          "comment": value,
+                                        }, SetOptions(merge: true)).then(
+                                                (value) => setState(() {
+                                                      isEditting = false;
+                                                    }));
+                                      },
+                                    )
+                                  : Text(comment),
                               trailing: appState.userEmail == user
-                                  ? IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.delete))
+                                  ? SizedBox(
+                                      width: 100,
+                                      child: Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  isEditting = true;
+                                                });
+                                              },
+                                              icon: const Icon(Icons.edit)),
+                                          IconButton(
+                                              onPressed: () {
+                                                db
+                                                    .collection("movieComment")
+                                                    .doc(data.id)
+                                                    .delete()
+                                                    .then((value) =>
+                                                        setState(() {}));
+                                              },
+                                              icon: const Icon(Icons.delete)),
+                                        ],
+                                      ),
+                                    )
                                   : null);
                         },
                       );
