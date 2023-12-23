@@ -50,5 +50,9 @@
     	<string>https</string>
     	<string>http</string>
   	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need to take a picture!</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need to take a picture!</string>
 </dict>
 </plist>

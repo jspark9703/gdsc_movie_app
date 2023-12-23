@@ -29,7 +29,9 @@ class AuthFunc extends StatelessWidget {
               padding: const EdgeInsets.only(left: 24, bottom: 8),
               child: TextButton(
                   onPressed: () {
-                    context.push('/profile');
+                    context.push(
+                      '/profile',
+                    );
                   },
                   child: const Text('Profile')),
             )),

@@ -90,7 +90,7 @@ class _DetailCommentState extends State<DetailComment> {
                           return ListTile(
                               contentPadding: const EdgeInsets.all(8),
                               leading: Text(user),
-                              title: isEditting
+                              title: isEditting && user == appState.userEmail
                                   ? TextField(
                                       controller: commentEditingController,
                                       autofocus: true,

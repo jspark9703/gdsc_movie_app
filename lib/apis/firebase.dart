@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart'
     hide EmailAuthProvider, PhoneAuthProvider;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,8 @@ class ApplicationState extends ChangeNotifier {
     init();
   }
   String? userEmail;
-
+  String? uid;
+  String? userAvatarUrl;
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
   bool _emailVerified = false;
@@ -28,6 +30,14 @@ class ApplicationState extends ChangeNotifier {
 
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
+        FirebaseStorage.instance
+            .refFromURL(
+                "gs://gdsc-movie-app.appspot.com/user_img/${user.uid}/KakaoTalk_20231215_175441153.jpg")
+            .getDownloadURL()
+            .then((value) {
+          userAvatarUrl = value;
+        });
+        uid = user.uid;
         userEmail = user.email;
         _loggedIn = true;
         _emailVerified = user.emailVerified;

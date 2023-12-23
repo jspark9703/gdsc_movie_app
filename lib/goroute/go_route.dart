@@ -8,6 +8,7 @@ import 'package:gdsc_movie_app/bloc/top_rated_bloc.dart';
 import 'package:gdsc_movie_app/bloc/upcoming_bloc.dart';
 import 'package:gdsc_movie_app/screens/detail.dart';
 import 'package:gdsc_movie_app/screens/home.dart';
+import 'package:gdsc_movie_app/widgets/userAvatar.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
@@ -92,11 +93,11 @@ final router = GoRouter(
         GoRoute(
           path: 'profile',
           builder: (context, state) {
+            // final imgUrl = state.extra as String;
             return ProfileScreen(
+              avatarSize: 150,
               providers: const [],
-              avatar: CircleAvatar(
-                  minRadius: 100,
-                  foregroundImage: NetworkImage(state.extra.toString())),
+              avatar: const CustomUserAvatar(),
               actions: [
                 SignedOutAction((context) {
                   context.pushReplacement('/');
