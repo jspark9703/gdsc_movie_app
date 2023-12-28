@@ -49,7 +49,7 @@ class _MovieListCardState extends State<MovieListCard> {
                   itemCount: widget.movieList.length,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {
-                      context.goNamed("detail", pathParameters: {
+                      context.pushNamed("detail", pathParameters: {
                         "movieId": widget.movieList[index].id.toString()
                       });
                     },

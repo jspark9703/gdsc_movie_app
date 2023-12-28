@@ -19,7 +19,7 @@ class PopMoviesBloc extends Bloc<MoviesEvent, MoviesState> {
 
       final moviesData = await tmdbApis.getData(event.apiType, ApiKey.tmbd);
       MoviesLoadedState(apiType: event.apiType, moviesData: moviesData);
-      print(moviesData);
+
       //apiType : now_playing, popular, top_rated, upcoming
       emit(MoviesLoadedState(apiType: event.apiType, moviesData: moviesData));
     } catch (e) {

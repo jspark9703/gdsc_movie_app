@@ -21,6 +21,20 @@ class TmdbApis {
     }
   }
 
+  Future<MoviesData> getSimilarMovies(String movieId, String apikey) async {
+    final response = await dio.get(
+      'https://api.themoviedb.org/3/movie/$movieId/similar?api_key=$apikey&language=en-US&page=1',
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = response.data;
+
+      return MoviesData.fromJson(data);
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   Future<MovieDetail> getDatailData(String movieId, String apikey) async {
     final response = await dio.get(
       'https://api.themoviedb.org/3/movie/$movieId?api_key=$apikey&language=en-US',

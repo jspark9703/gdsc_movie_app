@@ -43,7 +43,7 @@ class _SearchWidgetState extends State<SearchWidget> {
         padding: const EdgeInsets.all(8.0),
         child: TextButton(
             onPressed: () {
-              context.goNamed("detail",
+              context.pushNamed("detail",
                   pathParameters: {"movieId": e.id.toString()});
 
               setState(() {

@@ -8,7 +8,7 @@ import 'package:gdsc_movie_app/bloc/top_rated_bloc.dart';
 import 'package:gdsc_movie_app/bloc/upcoming_bloc.dart';
 import 'package:gdsc_movie_app/screens/detail.dart';
 import 'package:gdsc_movie_app/screens/home.dart';
-import 'package:gdsc_movie_app/widgets/userAvatar.dart';
+import 'package:gdsc_movie_app/widgets/profile/userAvatar.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
@@ -95,6 +95,7 @@ final router = GoRouter(
           builder: (context, state) {
             // final imgUrl = state.extra as String;
             return ProfileScreen(
+              appBar: AppBar(title: const Text("Profile")),
               avatarSize: 150,
               providers: const [],
               avatar: const CustomUserAvatar(),

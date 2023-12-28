@@ -11,8 +11,8 @@ class DetailComment extends StatefulWidget {
 }
 
 class _DetailCommentState extends State<DetailComment> {
-  bool isEditting = false;
-
+  late int editNum;
+  late bool isEditting = false;
   @override
   Widget build(BuildContext context) {
     TextEditingController textEditingController = TextEditingController();
@@ -36,6 +36,8 @@ class _DetailCommentState extends State<DetailComment> {
                         ? TextField(
                             controller: textEditingController,
                             maxLines: 1,
+                            decoration:
+                                const InputDecoration(hintText: "댓글을 작성하세요!"),
                             onSubmitted: (value) {
                               setState(() {
                                 movieComment = <String, dynamic>{
@@ -90,7 +92,7 @@ class _DetailCommentState extends State<DetailComment> {
                           return ListTile(
                               contentPadding: const EdgeInsets.all(8),
                               leading: Text(user),
-                              title: isEditting && user == appState.userEmail
+                              title: isEditting && editNum == index
                                   ? TextField(
                                       controller: commentEditingController,
                                       autofocus: true,
@@ -116,6 +118,7 @@ class _DetailCommentState extends State<DetailComment> {
                                           IconButton(
                                               onPressed: () {
                                                 setState(() {
+                                                  editNum = index;
                                                   isEditting = true;
                                                 });
                                               },
